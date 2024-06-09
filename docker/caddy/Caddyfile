@@ -1,0 +1,12 @@
+:80 {
+	# compress stuff
+	encode zstd gzip
+
+	# static files are in /static
+	root * /static
+
+	# pass everything else to backend
+        reverse_proxy talapoin:8000
+
+	file_server
+}

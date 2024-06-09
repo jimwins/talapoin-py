@@ -1,0 +1,70 @@
+version: '3.4'
+
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    hostname: talapoin-py
+    env_file: ./.env
+    environment:
+      - TS_SERVE_CONFIG=/config/talapoin.json
+      - TS_STATE_DIR=/var/lib/tailscale
+    volumes:
+      - tailscale_state:/var/lib/tailscale
+      - ./docker/tailscale:/config
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+      - sys_module
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.8.4
+    volumes:
+      - ./docker/caddy:/etc/caddy
+      - ./:/app
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+  talapoin:
+    build: ./
+    env_file: ./.env
+    expose:
+      - "8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.4.0
+    env_file: ./.env
+    expose:
+      - "3306"
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.6
+    env_file: ./.env
+    volumes:
+      - meilisearch_data:/meili_data
+    expose:
+      - "7700"
+    restart: unless-stopped
+
+#  backup:
+#    build: backup
+#    env_file: ./config
+#    environment:
+#      - MYSQL_HOST=db
+#      - SCHEDULE=0 0 20 * * *
+#    restart: always
+
+volumes:
+  mysql_data:
+  caddy_data:
+  caddy_config:
+  meilisearch_data:
+  tailscale_state:
