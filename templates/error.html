@@ -5,23 +5,46 @@
 {% endblock %}
 
 {% block content %}
-  <h1>error!</h1>
+  <h1>Error!</h1>
 
-  {% if exception %}
-      <p class="error">{{ exception.getMessage() }}</p>
-      {% if exception.code == 401 %}
-        <form class="stacked" method="POST" action="{{ url_for('login') }}">
-          <label>
-            Token
-            <input type="password" name="token">
-          </label>
-          <button type="submit">
-            Log in
-          </button>
-        </form>
-      {% endif %}
-  {% else %}
-    <p class="error">Some sort of error occured.</p>
+  <p class="error">
+    {% if exception %}
+        {{ exception.getMessage() }}
+    {% else %}
+        An unexpected error has occured!
+    {% endif %}
+  </p>
+
+  {% if exception.code == 401 %}
+    <form class="stacked" method="POST" action="{{ url_for('login') }}">
+      <label>
+        Token
+        <input type="password" name="token">
+      </label>
+      <button type="submit">
+        Log in
+      </button>
+    </form>
+  {% endif %}
+
+  {% if detailed %}
+    <ol>
+      {% for trace in exception.getTrace() %}
+        <li>
+          {% if trace.file %}
+            {{ trace.file  -}}
+            {%- if trace.line %}({{ trace.line }}){% endif %}
+            :
+          {% endif %}
+          {{ trace.class }}{{ trace.type }}{{ trace.function -}}
+          (
+            {%- for arg in trace.args -%}
+              {{- arg | get_debug_type -}}{% if not loop.last %}, {% endif -%}
+            {%- endfor -%}
+          )
+        </li>
+      {% endfor %}
+    </ol>
   {% endif %}
 
   <p align="center"><b><a href="/">try it again from the top.</a></b></p>

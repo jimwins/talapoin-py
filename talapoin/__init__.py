@@ -7,6 +7,8 @@ from flask_sqlalchemy_lite import SQLAlchemy
 
 from sqlalchemy import select, URL
 
+from markupsafe import Markup
+
 import mistune
 
 db = SQLAlchemy()
@@ -51,11 +53,12 @@ def create_app(test_config=None):
 
     @app.errorhandler(404)
     def page_not_found(e):
-        return render_template('error.html'), 404
+        # TODO figure out how to pass exception in useful way
+        return render_template('error.html', exception= None), 404
 
     from . import blog
     app.register_blueprint(blog.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/', endpoint='top')
 
     from .models import Page
     @app.route('/<path:path>')
@@ -66,6 +69,14 @@ def create_app(test_config=None):
             abort(404)
         return render_template('page.html', page=page)
 
+    @app.template_filter('get_debug_type')
+    def get_debug_type():
+        return ""
+
+    @app.template_filter('expand_psuedo_urls')
+    def expand_psuedo_urls(s):
+        return s
+
     @app.template_filter('markdown_to_html')
     def markdown(s):
         return mistune.html(s)
@@ -74,8 +85,25 @@ def create_app(test_config=None):
     def date(dt, fmt):
         return dt
 
+    @app.template_filter('raw')
+    def raw(s):
+        return Markup(s)
+
+    @app.template_filter('e')
+    def e(s, context= None):
+        return s
+
     @app.context_processor
     def inject_twig_compat():
+        # Unlike Flask's default url_for() we accept a second parameter that
+        # looks like a dict of keywords to make it compatible with Twig's
+        # url_for() which looks like url_for('route', { 'var': value })
+        def url_for(endpoint_name, *args, **kwargs):
+            d = {}
+            if (args): # TODO should validate this more, we just assume it's a dict
+                d = args[0]
+            return app.url_for(endpoint_name, **d, **kwargs)
+
         def full_url_for(endpoint_name, *args, **kwargs):
             view_func = app.view_functions.get(endpoint_name)
             if view_func:
@@ -114,6 +142,7 @@ def create_app(test_config=None):
             return ""
 
         return {
+            'url_for' : url_for,
             'full_url_for' : full_url_for,
             'current_url' : current_url,
             'block' : block,

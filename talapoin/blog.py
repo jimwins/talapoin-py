@@ -12,7 +12,7 @@ from .models import Entry
 bp = Blueprint('blog', __name__)
 
 @bp.route('/')
-def index():
+def top():
     entries = db.session.scalars(select(Entry).where(Entry.draft == False).order_by(Entry.created_at.desc()).limit(10)).all()
     return render_template('index.html', entries=entries)
 

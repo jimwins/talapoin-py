@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
-{% import 'entry.twig' as blog with context %}
+{% import 'blog.twig' as blog %}
 
 {% block title %}
   {{- entry.title -}}
-  {%- if entry.title %}/{% endif %}
+  {%- if entry.title %} / {% endif %}
   {{- entry.created_at | date('F j, Y g:ia') -}}
   @ trainedmonkey
 {% endblock %}
@@ -11,16 +11,16 @@
 {% block extra_head %}
   <link rel="webmention" href="/~webmention">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="{{ entry.canonicalUrl }}">
-  <meta property="og:title" content="{{ entry.title }}">
-  <meta property="og:image" content="{{ entry.featuredImage }}">
+  <meta property="og:url" content="{{ entry.canonicalUrl() | e('html_attr') }}">
+  <meta property="og:title" content="{{ entry.title | e('html_attr') }}">
+  <meta property="og:image" content="{{ entry.featuredImage | e('html_attr') }}">
   <meta property="article:author" content="Jim Winstead">
   <meta property="article:published_time"
-        content="{{ entry.created_at | date('c') }}">
+        content="{{ entry.created_at | date('c') | e('html_attr') }}">
   <meta property="article:modified_time"
-        content="{{ entry.updated_at | date('c') }}">
+        content="{{ entry.updated_at | date('c') | e('html_attr') }}">
   {% for tag in entry.tags %}
-    <meta property="article:tag" content="{{ tag }}">
+    <meta property="article:tag" content="{{ tag | e('html_attr') }}">
   {% endfor %}
 
   <script>
@@ -66,13 +66,13 @@
   {% if previous.id or next.id %}
     <div class="prevnext" style="text-align: center; border: none">
       {% if previous.id %}
-        <a href="{{ previous.canonicalUrl }}">&laquo; {% if previous.title %}{{ previous.title }}{% else %}{{ blog.date_format(previous.created_at) }}{% endif %}</a>
+        <a href="{{ previous.canonicalUrl() }}">&laquo; {% if previous.title %}{{ previous.title }}{% else %}{{ blog.date_format(previous.created_at) }}{% endif %}</a>
       {% endif %}
       {% if previous.id and next.id %}
         &bull;
       {% endif %}
       {% if next.id %}
-        <a href="{{ next.canonicalUrl }}">{% if next.title %}{{ next.title }}{% else %}{{ blog.date_format(next.created_at) }}{% endif %} &raquo;</a>
+        <a href="{{ next.canonicalUrl() }}">{% if next.title %}{{ next.title }}{% else %}{{ blog.date_format(next.created_at) }}{% endif %} &raquo;</a>
       {% endif %}
       <br clear="both">
     </div>
@@ -86,14 +86,14 @@
     {% for comment in entry.comments.where_lte('spam', spam).find_many() %}
       <div class="comment {% if comment.spam %}spam{% endif %}" id="c{{ comment.id }}">
         <div class="p-content">
-            {{ comment.comment | markdown_to_html }}
+          {{ comment.comment | markdown_to_html | expand_psuedo_urls | raw }}
         </div>
         <div class="details">
           &raquo;
           {# XXX expose email to admin #}
           {{ comment.name | escape }}
           {% if comment.url %}
-            <a rel="nofollow" href="{% if not (comment.url.startsWith('http')) %}http://{% endif %}{{ comment.url }}">(link)</a>
+            <a rel="nofollow" href="{% if not (comment.url matches '/^https?:/') %}http://{% endif %}{{ comment.url }}">(link)</a>
           {% endif %}
           &raquo;
           {# XXX admin link for delete/spam/ham #}

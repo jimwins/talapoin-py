@@ -14,15 +14,15 @@
 
 {% block extra_head %}
   {% if tag %}
-    <link rel="alternate" type="application/atom+xml" title="atom feed for {{ tag }}" href="{{ full_url_for('tag_atom', { tag: tag }) }}" />
+    <link rel="alternate" type="application/atom+xml" title="atom feed for {{ tag | e('html_attr') }}" href="{{ full_url_for('tag_atom', { tag: tag }) }}" />
   {% else %}
     <link rel="alternate" type="application/atom+xml" title="atom feed" href="{{ full_url_for('blog.atom') }}" />
   {% endif %}
   <meta name="ICBM" content="34.0480,-118.2473" />
   <meta name="geo.position" content="34.0480;-118.2473" />
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ full_url_for('index') }}">
-  <meta property="og:title" content="{{ block('title') }}">
+  <meta property="og:url" content="{{ full_url_for('top') | e('html_attr') }}">
+  <meta property="og:title" content="{{ block('title') | e('html_attr') }}">
 {% endblock %}
 
 {% block content %}
@@ -35,9 +35,7 @@
   </h1>
 
   {% if not tag %}
-  {#
-    {% include '@hireMe' %}
-  #}
+    {{ includeFragment('@hireMe').content | raw }}
   {% endif %}
 
   {% include 'entries.twig' %}
