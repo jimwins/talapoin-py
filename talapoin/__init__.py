@@ -1,6 +1,7 @@
 import os
 import sys
 import inspect
+import re
 
 from flask import Flask, render_template, url_for, request, abort
 from flask_sqlalchemy_lite import SQLAlchemy
@@ -75,6 +76,10 @@ def create_app(test_config=None):
 
     @app.template_filter('expand_psuedo_urls')
     def expand_psuedo_urls(s):
+        # Replace ISBN references with Bookshop.org URLs
+        s = re.sub(r'isbn:([0-9x]+)', r'https://bookshop.org/a/94608/\1', s)
+        # Replace ASIN references with Amazon URLs
+        s = re.sub(r'asin:(\w+)', r'http://www.amazon.com/exec/obidos/ASIN/\1/trainedmonkey', s)
         return s
 
     @app.template_filter('markdown_to_html')
