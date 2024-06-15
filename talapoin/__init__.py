@@ -7,7 +7,7 @@ from flask_sqlalchemy_lite import SQLAlchemy
 
 from sqlalchemy import select, URL
 
-from markupsafe import Markup
+from markupsafe import Markup, escape
 
 import mistune
 
@@ -85,13 +85,18 @@ def create_app(test_config=None):
     def date(dt, fmt):
         return dt
 
+    # Just an alias for what Twig calls it
     @app.template_filter('raw')
     def raw(s):
         return Markup(s)
 
+    # Jinja does much more limited escaping than Twig, but this handles the
+    # strategy argument values we need for our templates that use the `e` filter.
     @app.template_filter('e')
-    def e(s, context= None):
-        return s
+    def e(s, strategy= None):
+        if strategy not in (None, "html", "html_attr"):
+            raise ValueError(f'Unhandled strategy "{strategy}" for escaping')
+        return escape(s)
 
     @app.context_processor
     def inject_twig_compat():
