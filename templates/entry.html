@@ -11,7 +11,7 @@
 {% block extra_head %}
   <link rel="webmention" href="/~webmention">
   <meta property="og:type" content="article">
-  <meta property="og:url" content="{{ entry.canonicalUrl() | e('html_attr') }}">
+  <meta property="og:url" content="{{ entry.canonicalUrl | e('html_attr') }}">
   <meta property="og:title" content="{{ entry.title | e('html_attr') }}">
   <meta property="og:image" content="{{ entry.featuredImage | e('html_attr') }}">
   <meta property="article:author" content="Jim Winstead">
@@ -66,13 +66,13 @@
   {% if previous.id or next.id %}
     <div class="prevnext" style="text-align: center; border: none">
       {% if previous.id %}
-        <a href="{{ previous.canonicalUrl() }}">&laquo; {% if previous.title %}{{ previous.title }}{% else %}{{ blog.date_format(previous.created_at) }}{% endif %}</a>
+        <a href="{{ previous.canonicalUrl }}">&laquo; {% if previous.title %}{{ previous.title }}{% else %}{{ blog.date_format(previous.created_at) }}{% endif %}</a>
       {% endif %}
       {% if previous.id and next.id %}
         &bull;
       {% endif %}
       {% if next.id %}
-        <a href="{{ next.canonicalUrl() }}">{% if next.title %}{{ next.title }}{% else %}{{ blog.date_format(next.created_at) }}{% endif %} &raquo;</a>
+        <a href="{{ next.canonicalUrl }}">{% if next.title %}{{ next.title }}{% else %}{{ blog.date_format(next.created_at) }}{% endif %} &raquo;</a>
       {% endif %}
       <br clear="both">
     </div>
