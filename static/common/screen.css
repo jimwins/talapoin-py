@@ -1,0 +1,481 @@
+/*! modern-normalize v2.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
+*,::after,::before{box-sizing:border-box}html{font-family:system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji';line-height:1.15;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4}body{margin:0}hr{height:0;color:inherit}abbr[title]{text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}::-moz-focus-inner{border-style:none;padding:0}:-moz-focusring{outline:1px dotted ButtonText}:-moz-ui-invalid{box-shadow:none}legend{padding:0}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}
+
+:root {
+  /* https://modernfontstacks.com: Antique but just Georgia */
+  --serif: 'Georgia Pro', Georgia, serif;
+  /* https://modernfontstacks.com: Neo-Grotesque */
+  --sans-serif: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+
+  --border-width: 1px;
+  --border-radius: 0.5rem;
+
+  color-scheme: light dark;
+
+  --text-color: light-dark(#3d3d3d, #eee8e9);
+  --background-color: light-dark(#eee8e9, #3d3d3d);
+
+  --primary-color: light-dark(#ab4f00, #d96500);
+
+  --link-color: light-dark(#1f437e, #8bb2f0);
+  --link-visited-color: light-dark(#1f437e, #8bb2f0);
+  --link-hover-color: light-dark(#3368bd, #8eaffc);
+
+  --error-color: light-dark(#8b2844,#ff6c96);
+  --ins-color: #8b2844;
+  --del-color: #626262;
+
+  --button-color: #eee8e9;
+  --button-background-color: #7a3900;
+  --button-border-color: #663000;
+  --button-hover-color: #ab4f00;
+
+  --input-color: inherit;
+  --input-background-color: light-dark(#fff7f9, #1d1d1d1d);
+  --input-border-color: light-dark(#663000, #79502c);
+
+  accent-color: var(--button-background-color);
+}
+
+:root {
+  &:has(input[name="color-scheme"][value="light dark"]:checked) {
+    color-scheme: light dark;
+  }
+  &:has(input[name="color-scheme"][value="light"]:checked) {
+    color-scheme: light;
+  }
+  &:has(input[name="color-scheme"][value="dark"]:checked) {
+    color-scheme: dark;
+  }
+}
+
+body {
+ min-height: 100vh;
+ font-family: var(--serif);
+ line-height: 1.6;
+
+ color: var(--text-color);
+ margin: 0;
+ margin-bottom: 1em;
+ background-image: url(monkey.png);
+ background-position: bottom left;
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+ background-color: var(--background-color);
+}
+
+h1 {
+ font-family: var(--sans-serif);
+ font-weight: normal;
+ text-align: right;
+}
+
+header h1 {
+  font-size: 1.8em;
+  color: var(--primary-color);
+  text-align: inherit;
+}
+header h1 a:link, header h1 a:visited {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+h2 {
+ font-family: var(--sans-serif);
+ margin-top: 0;
+ margin-bottom: 0.25em;
+}
+
+p, blockquote {
+ margin: 0.25em 0;
+ text-indent: 1em;
+ line-height: 150%;
+}
+
+div {
+ clear: both;
+}
+
+a img {
+ border: none;
+}
+
+img.responsive {
+ width: 100%;
+ height: auto;
+}
+
+cite {
+ font-style: normal;
+}
+
+ins {
+ color: var(--ins-color);
+ text-decoration: none;
+}
+del {
+ color: var(--del-color);
+ text-decoration: line-through;
+}
+
+a:link {
+  color: var(--link-color);
+}
+a:visited {
+  color: var(--link-visited-color);
+}
+a:link, a:visited {
+  text-decoration: underline;
+}
+a:hover, a:focus {
+  color: var(--link-hover-color);
+  text-decoration-style: double;
+}
+
+a.tag:link, a.tag:visited {
+ text-decoration: none;
+}
+a.tag:hover {
+ text-decoration: underline;
+}
+
+/* underline items with titles, and display the help cursor */
+span[title] {
+ border-bottom: 1px dotted #bca;
+ border-bottom: 1px dotted rgba(255,255,255,0.4);
+ cursor: help;
+}
+
+form {
+ margin: 0;
+ padding: 0;
+}
+
+.visually-hidden:not(:focus):not(:active) {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* This makes monospace look better on my system. YMMV. */
+code, kbd, pre, samp {
+    font-size-adjust: 0.5;
+}
+
+/* Want the hand for form controls and other button-y things */
+button,
+[type="button"], [type="reset"], [type="submit"], [type="image"], [type="checkbox"], [type="radio"],
+summary {
+  cursor: pointer;
+}
+
+.error {
+ color: var(--error-color);
+ background-color: inherit;
+}
+
+form.stacked {
+  margin-top: 2em;
+
+  label {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  label.block {
+    margin-top: 1rem;
+    display: block;
+  }
+
+  & button, label input, label textarea, .awesomplete {
+    display: block;
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 80ch;
+  }
+
+  button, input[type="file"]::file-selector-button {
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: start;
+    background-color: var(--button-background-color);
+    color: var(--button-color);
+    font-family: var(--sans-serif);
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    padding: 0.25em 0.75em;
+    min-width: 10ch;
+    min-height: 2em;
+    text-align: center;
+    line-height: 1.1;
+
+    border: var(--border-width) solid var(--button-border-color);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.18);
+  }
+  button:hover, input[type="file"]::file-selector-button:hover {
+    background-color: var(--button-hover-color);
+  }
+
+  input, textarea, select, button {
+    margin-bottom: 0.5rem;
+  }
+
+  input, textarea {
+    max-width: 100%;
+    padding: 0.25em 0.5em;
+    border: var(--border-width) solid var(--input-border-color);
+    background: inherit;
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.18);
+  }
+
+  input {
+    line-height: 1;
+    height: 2.25rem;
+  }
+
+  input[type="file"] {
+    display: inline-block;
+    width: auto;
+    border: none;
+    box-shadow: none;
+    height: auto; /* Firefox clips the bottom of the button without this. */
+  }
+
+  input[type="radio"], input[type="checkbox"] {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    width: auto;
+    height: inherit;
+
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+
+  input:focus, textarea:focus {
+    background: var(--input-background-color);
+  }
+
+  select {
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+    position: relative;
+    min-width: 15ch;
+    max-width: 30ch;
+    border: var(--border-width) solid var(--input-border-color);
+    border-radius: var(--border-radius);
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    line-height: 1.1;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.18);
+    background-color: inherit;
+  }
+  select, select::after {
+    grid-area: select;
+  }
+}
+
+.left-sidebar-grid {
+  display: grid;
+  grid-template-areas:
+    'header'
+    'main-content'
+    'left-sidebar'
+    'footer';
+}
+
+/* general column padding */
+.left-sidebar-grid > * {
+  padding: 0 1rem;
+}
+
+/* assign columns to grid areas */
+.left-sidebar-grid > header {
+  grid-area:header;
+}
+.left-sidebar-grid > .main-content {
+  grid-area:main-content;
+}
+.left-sidebar-grid > .left-sidebar {
+  grid-area:left-sidebar;
+}
+.left-sidebar-grid > footer {
+  grid-area:footer;
+}
+
+/* smaller than tablet, like a mobile */
+@media (max-width:767.99px) {
+    h1 {
+        margin: 0;
+    }
+    footer {
+        /* clear the monkey from background */
+        margin-bottom: 100px;
+    }
+}
+
+/* tablet breakpoint */
+@media (min-width:768px) {
+  .left-sidebar-grid {
+    grid-template-columns: max-content 1fr;
+    grid-template-areas:
+      'header main-content'
+      'left-sidebar main-content'
+      'left-sidebar footer';
+  }
+}
+
+.left-sidebar-grid {
+}
+
+.left-sidebar {
+ max-height: 110vh;
+ text-align: right;
+ position: sticky;
+ top: 0;
+}
+
+.left-sidebar div, .left-sidebar form {
+ margin-bottom: 1.25em;
+}
+
+.left-sidebar ul {
+ list-style: none;
+ margin: 0;
+ padding: 0;
+
+ margin-bottom: 1.25em;
+}
+
+.left-sidebar a {
+ display: block;
+ margin-bottom: 0.1em;
+ padding-right: 0.5ch;
+ text-decoration: none;
+ border-bottom: 1px solid var(--link-color);
+ font-family: var(--sans-serif);
+}
+
+.left-sidebar a:visited {
+ border-bottom: 1px solid var(--link-visited-color);
+}
+
+.left-sidebar a:hover {
+ border-bottom: 1px solid var(--link-hover-color);
+}
+
+#search {
+ padding: 0.25em;
+}
+
+#search input[type="text"], #search input[type="search"] {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* suppress bottom border triggered by title="" attribute */
+#blogs a {
+ border-bottom: none;
+}
+
+.main-content {
+ padding-right: 1ch;
+ max-width: 100ch;
+}
+
+.main-content > div {
+ padding: 1em;
+ margin-top: 1em;
+ border-bottom: 1px solid var(--input-border-color);
+ margin-bottom: 1em;
+}
+
+.main-content > p {
+ margin-top: 1em;
+}
+
+.h-entry, .comment {
+    .e-content, .p-content {
+        max-width: 80ch;
+    }
+
+    /* Images in entries are always responsive */
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Let <pre> blocks break so the don't blow out layout */
+    pre {
+        white-space: break-spaces;
+        background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.2));
+        padding: 1em;
+    }
+
+    /* Have some fun with tables */
+    table {
+        width: 100%;
+        background: rgb(0,0,0,0.1);
+        border-collapse: collapse;
+    }
+    table th, table td {
+        padding: 0.25em 1em;
+    }
+    table tbody tr:nth-child(even) {
+        background: rgb(0,0,0,0.05);
+    }
+    table thead {
+        border-bottom: 1px solid rgb(0,0,0,0.1);
+    }
+    table tfoot {
+        border-top: 1px solid rgb(0,0,0,0.1);
+    }
+
+    .details {
+        text-align: right;
+        margin-top: 0.5em;
+        margin-right: 1em;
+        font-size: smaller;
+        font-family: var(--sans-serif);
+    }
+
+    .details a {
+        text-decoration: none;
+    }
+
+    .details a {
+        white-space: nowrap;
+    }
+}
+
+.main-content blockquote {
+ font-family: var(--sans-serif);
+ border-left: 2px solid rgba(0,0,0,0.2);
+ padding-left: 1em;
+}
+
+footer {
+  text-align: right;
+  padding-right: 0.5em;
+  width: 100%;
+  max-width: 80ch;
+}
+
+@media print {
+  .visually-hidden, #sidebar, #comment, #links, .prevnext, .admin, footer {
+   display: none;
+  }
+}

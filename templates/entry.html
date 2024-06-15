@@ -1,0 +1,151 @@
+{% extends 'layout.html' %}
+{% import 'entry.twig' as blog with context %}
+
+{% block title %}
+  {{- entry.title -}}
+  {%- if entry.title %}/{% endif %}
+  {{- entry.created_at | date('F j, Y g:ia') -}}
+  @ trainedmonkey
+{% endblock %}
+
+{% block extra_head %}
+  <link rel="webmention" href="/~webmention">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="{{ entry.canonicalUrl }}">
+  <meta property="og:title" content="{{ entry.title }}">
+  <meta property="og:image" content="{{ entry.featuredImage }}">
+  <meta property="article:author" content="Jim Winstead">
+  <meta property="article:published_time"
+        content="{{ entry.created_at | date('c') }}">
+  <meta property="article:modified_time"
+        content="{{ entry.updated_at | date('c') }}">
+  {% for tag in entry.tags %}
+    <meta property="article:tag" content="{{ tag }}">
+  {% endfor %}
+
+  <script>
+    function getCookie(name) {
+      var match= document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return decodeURIComponent(match[2]);
+    }
+
+    function fromHTML(html, trim = true) {
+      // Process the HTML string.
+      html = trim ? html.trim() : html;
+      if (!html) return null;
+
+      // Then set up a new template element.
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      const result = template.content.children;
+
+      // Then return either an HTMLElement or HTMLCollection,
+      // based on whether the input HTML had one or more roots.
+      if (result.length === 1) return result[0];
+      return result;
+    }
+
+    document.addEventListener('DOMContentLoaded', (ev) => {
+      document.querySelectorAll('.h-entry').forEach((entry) => {
+        if (getCookie('hasToken')) {
+          const details = entry.querySelector('.details')
+          const id = entry.id.match(new RegExp('^entry_([0-9]+)'))[1]
+          const link = fromHTML(`<span>&raquo; <a href="/~admin/entry/${id}">edit</a></span>`);
+          details.append(link);
+        }
+      })
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+  <h1>from the Archive</h1>
+
+  {% include 'entry.twig' %}
+
+  {% if previous.id or next.id %}
+    <div class="prevnext" style="text-align: center; border: none">
+      {% if previous.id %}
+        <a href="{{ previous.canonicalUrl }}">&laquo; {% if previous.title %}{{ previous.title }}{% else %}{{ blog.date_format(previous.created_at) }}{% endif %}</a>
+      {% endif %}
+      {% if previous.id and next.id %}
+        &bull;
+      {% endif %}
+      {% if next.id %}
+        <a href="{{ next.canonicalUrl }}">{% if next.title %}{{ next.title }}{% else %}{{ blog.date_format(next.created_at) }}{% endif %} &raquo;</a>
+      {% endif %}
+      <br clear="both">
+    </div>
+  {% endif %}
+
+  {% if entry.comment_count %}
+    <h2>Comments</h2>
+
+    {# XXX show spam to admin #}
+    {% set spam = 0 %}
+    {% for comment in entry.comments.where_lte('spam', spam).find_many() %}
+      <div class="comment {% if comment.spam %}spam{% endif %}" id="c{{ comment.id }}">
+        <div class="p-content">
+            {{ comment.comment | markdown_to_html }}
+        </div>
+        <div class="details">
+          &raquo;
+          {# XXX expose email to admin #}
+          {{ comment.name | escape }}
+          {% if comment.url %}
+            <a rel="nofollow" href="{% if not (comment.url.startsWith('http')) %}http://{% endif %}{{ comment.url }}">(link)</a>
+          {% endif %}
+          &raquo;
+          {# XXX admin link for delete/spam/ham #}
+          {{ blog.date_format(comment.created_at) }}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h2>Add a comment</h2>
+
+  {% if date(entry.created_at) > date("-7 days") and not entry.closed %}
+    <form class="stacked" method="POST" action="{{ url_for('add-comment', { id: entry.id }) }}">
+      <label>
+        Name
+        <input type="text" name="name" value="" required>
+      </label>
+
+      <label>
+        Email
+        <input type="email" name="email" value="" required>
+      </label>
+
+      <label>
+        Website (optional)
+        <input type="url" name="url" value="">
+      </label>
+
+      <label>
+        Your comment
+        <textarea name="comment" rows="10"></textarea>
+      </label>
+
+      <button type="submit">
+        Submit
+      </button>
+
+      <div>
+        <small>
+          Comments may be rejected or hidden if the robots decide that they
+          look like spam.
+        </small>
+      </div>
+    </form>
+  {% else %}
+    <p>Sorry, comments on this post are closed.</p>
+  {% endif %}
+
+  <style>
+    .spam {
+      color: rgba(192, 0, 24, 0.5);
+    }
+  </style>
+
+{% endblock %}

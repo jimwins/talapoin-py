@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  error
+{% endblock %}
+
+{% block content %}
+  <h1>error!</h1>
+
+  {% if exception %}
+      <p class="error">{{ exception.getMessage() }}</p>
+      {% if exception.code == 401 %}
+        <form class="stacked" method="POST" action="{{ url_for('login') }}">
+          <label>
+            Token
+            <input type="password" name="token">
+          </label>
+          <button type="submit">
+            Log in
+          </button>
+        </form>
+      {% endif %}
+  {% else %}
+    <p class="error">Some sort of error occured.</p>
+  {% endif %}
+
+  <p align="center"><b><a href="/">try it again from the top.</a></b></p>
+{% endblock %}

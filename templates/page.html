@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  {{- page.title -}}
+{% endblock %}
+
+{% block content %}
+  {{- page.content | markdown_to_html | safe -}}
+{% endblock %}

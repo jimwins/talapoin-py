@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://gmpg.org/xfn/1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    {% block title %}trainedmonkey{% endblock %}
+    {% if 'trainedmonkey' not in block('title') %}
+      @ trainedmonkey
+    {% endif %}
+  </title>
+  <link rel="author" href="{{ full_url_for('index') }}" />
+  <link rel="authorization_endpoint" href="https://indieauth.com/auth">
+  <link rel="icon" href="/common/fav.ico" />
+  <link rel="stylesheet" type="text/css" media="screen"
+        href="/common/screen.css?{{ current_release() }}" />
+  <link rel="stylesheet" type="text/css" media="screen"
+        href="/common/sh_style.css" />
+  {% block extra_head %}{% endblock %}
+  <script type="text/javascript" src="/common/sh_main.js"></script>
+</head>
+
+<body onload="sh_highlightDocument('/common/sh_lang/', '.min.js');">
+
+<ul class="visually-hidden">
+  <li><a href="#sidebar">skip to sidebar</a></li>
+  <li><a href="#search">skip to search box</a></li>
+</ul>
+
+<div class="left-sidebar-grid">
+  <header>
+    <h1>
+      <a href="/">trained<b>monkey</b></a>
+    </h1>
+  </header>
+
+  <div role="main" class="main-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <div role="navigation" id="sidebar" class="left-sidebar">
+    {% block sidebar %}
+
+      {{ include(template_from_string(includeFragment('@navigation').content)) }}
+
+      {% if current_url().find('/photo') == 0 %}
+        {% set url = '/photo' %}
+      {% else %}
+        {% set url = '/search' %}
+      {% endif %}
+
+      <search>
+        <form id="search" class="stacked" method="get" action="{{ url }}">
+          <label>
+            <span class="visually-hidden">Search</span>
+            <input type="search"
+                   name="q" value="{{ q }}"
+                   size="10"
+                   placeholder="Search"
+                   autosave="tm_search"
+                   results="10">
+          </label>
+        </form>
+      </search>
+    {% endblock %}
+
+    <form id="dark-mode">
+        <label>
+            <input type="radio" name="color-scheme" value="light dark" checked>
+            Default
+        </label>
+        <label>
+            <input type="radio" name="color-scheme" value="light">
+            Light
+        </label>
+        <label>
+            <input type="radio" name="color-scheme" value="dark">
+            Dark
+        </label>
+    </form>
+  </div>
+
+  <footer>
+    <p><a rel="copyright" href="https://creativecommons.org/publicdomain/zero/1.0/">Dedicated to the public domain</a> by <a class="h-card" href="{{ full_url_for('index') }}">Jim&nbsp;Winstead&nbsp;Jr.</a></p>
+  </footer>
+
+</div>
+
+</body>
+</html>
+<!--
+<rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <Work rdf:about="">
+  <license rdf:resource="http://web.resource.org/cc/PublicDomain" />
+ </Work>
+ <License rdf:about="http://web.resource.org/cc/PublicDomain">
+  <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+  <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+  <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+ </License>
+</rdf:RDF>
+-->

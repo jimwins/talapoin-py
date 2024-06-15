@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% if tag %}
+  {% set title = "with '" ~ tag ~ "' tag " %}
+{% endif %}
+
+{% block title %}
+  {%- if title -%}
+    {{ title }} @ trainedmonkey
+  {%- else -%}
+    trainedmonkey: aka Jim Winstead Jr.
+  {%- endif -%}
+{% endblock %}
+
+{% block extra_head %}
+  {% if tag %}
+    <link rel="alternate" type="application/atom+xml" title="atom feed for {{ tag }}" href="{{ full_url_for('tag_atom', { tag: tag }) }}" />
+  {% else %}
+    <link rel="alternate" type="application/atom+xml" title="atom feed" href="{{ full_url_for('blog.atom') }}" />
+  {% endif %}
+  <meta name="ICBM" content="34.0480,-118.2473" />
+  <meta name="geo.position" content="34.0480;-118.2473" />
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ full_url_for('index') }}">
+  <meta property="og:title" content="{{ block('title') }}">
+{% endblock %}
+
+{% block content %}
+  <h1>
+    {% if tag %}
+      Entries tagged '{{ tag }}'
+    {% else %}
+      aka Jim Winstead Jr.
+    {% endif %}
+  </h1>
+
+  {% if not tag %}
+  {#
+    {% include '@hireMe' %}
+  #}
+  {% endif %}
+
+  {% include 'entries.twig' %}
+{% endblock %}

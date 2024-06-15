@@ -1,0 +1,113 @@
+.sh_sourceCode {
+    color: inherit;
+    font-style: normal;
+    font-weight: normal;
+
+    /* language keywords */
+    .sh_keyword {
+        color: light-dark(darkslateblue, lightsteelblue);
+        font-weight: bold;
+    }
+    /* basic types */
+    .sh_type {
+        color: light-dark(darkgreen, darkseagreen);
+    }
+    /* user-defined types */
+    .sh_usertype {
+        color: teal;
+    }
+    /* strings and chars */
+    .sh_string {
+        color: light-dark(crimson, pink);
+    }
+    /* regular expressions */
+    .sh_regexp {
+        color: light-dark(sienna, blanchedalmond);
+    }
+    /* special characters, like \n, \t, \\ */
+    .sh_specialchar {
+        color: pink;
+    }
+    /* comments */
+    .sh_comment {
+        color: light-dark(brown, darksalmon);
+        font-style: italic;
+    }
+    /* literal numbers */
+    .sh_number {
+        color: light-dark(purple, plum);
+    }
+    /* preprocessor commands (#include, import) */
+    .sh_preproc {
+        color: light-dark(darkblue,lightblue);
+        font-weight: bold;
+    }
+    /* symbols (<, >, +) */
+    .sh_symbol {
+        color: light-dark(darkred, burlywood);
+    }
+    /* function class and declarations */
+    .sh_function {
+        color: inherit;
+        font-weight: bold;
+    }
+    /* block brackets */
+    .sh_cbracket {
+        color: red;
+    }
+    /* TODO and FIXME */
+    .sh_todo {
+        font-weight: bold;
+        background-color: cyan;
+    }
+    /* Predefined variables and functions */
+    .sh_predef_var {
+        color: darkblue;
+    }
+    .sh_predef_func {
+        color: darkblue;
+        font-weight: bold;
+    }
+    /* class names */
+    .sh_classname {
+        color: teal;
+    }
+    /* URLs */
+    .sh_url {
+        color: var(--link-color);
+    }
+    /* Variable name */
+    .sh_variable {
+        color: light-dark(darkgreen, darkseagreen);
+    }
+}
+
+/* for ChangeLog and Log files */
+.sh_sourceCode .sh_date { color: blue; font-weight: bold; }
+.sh_sourceCode .sh_time, .sh_sourceCode .sh_file { color: darkblue; font-weight: bold; }
+.sh_sourceCode .sh_ip, .sh_sourceCode .sh_name { color: darkgreen; }
+
+/* for LaTeX */
+.sh_sourceCode .sh_italics { color: darkgreen; font-style: italic; }
+.sh_sourceCode .sh_bold { color: darkgreen; font-weight: bold; }
+.sh_sourceCode .sh_underline { color: darkgreen; text-decoration: underline; }
+.sh_sourceCode .sh_fixed { color: green; }
+.sh_sourceCode .sh_argument { color: darkgreen; }
+.sh_sourceCode .sh_optionalargument { color: purple; }
+.sh_sourceCode .sh_math { color: orange; }
+.sh_sourceCode .sh_bibtex { color: blue; }
+
+/* for diffs */
+.sh_sourceCode .sh_oldfile { color: orange; }
+.sh_sourceCode .sh_newfile { color: darkgreen; }
+.sh_sourceCode .sh_difflines { color: blue; }
+
+/* for css */
+.sh_sourceCode .sh_selector { color: purple; }
+.sh_sourceCode .sh_property { color: blue; }
+.sh_sourceCode .sh_value { color: darkgreen; font-style: italic; }
+
+/* other */
+.sh_sourceCode .sh_section { color: inherit; font-weight: bold; }
+.sh_sourceCode .sh_paren { color: red; }
+.sh_sourceCode .sh_attribute { color: darkgreen; }
