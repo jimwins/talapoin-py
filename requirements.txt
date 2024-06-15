@@ -1,2 +1,7 @@
-flask
+Flask
 gunicorn
+SQLAlchemy
+Jinja2
+Flask-SQLAlchemy-Lite
+mistune
+mysql-connector-python
