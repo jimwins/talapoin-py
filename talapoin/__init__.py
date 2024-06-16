@@ -52,6 +52,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    from .templates import loader
+    app.jinja_loader = loader
+    loader.init_db(db)
+
     @app.errorhandler(404)
     def page_not_found(e):
         # TODO figure out how to pass exception in useful way
@@ -60,6 +64,10 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='top')
+
+    @app.route('/photo')
+    def photos():
+        return "Not yet"
 
     from .models import Page
     @app.route('/<path:path>')

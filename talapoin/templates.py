@@ -1,37 +1,38 @@
-from jinja2 import Loader, Environment
+from jinja2 import BaseLoader, FileSystemLoader, TemplateNotFound
+from sqlalchemy import select
 
-class FallbackLoader(Loader):
-    """
-    A Jinja loader that first tries a function to load the template,
-    then falls back to the filesystem loader.
-    """
+from .models import Page
 
+class TalapoinLoader(BaseLoader):
     def __init__(self, load_func, filesystem_loader):
         self.load_func = load_func
         self.filesystem_loader = filesystem_loader
 
     def get_source(self, environment, template):
-        """
-        Attempts to load the template from the load_func first.
-        If that fails, falls back to the filesystem loader.
-        """
+        # First we try load_func, then fall back to FileSystemLoader if
+        # load_func signals it couldn't handle it
         try:
-            source, filename, uptodate = self.load_func(template)
+            source, filename, uptodate = self.load_func(self.db, template)
             return source, filename, uptodate
-        except (LookupError, NameError):
-            # Template not found with the function, try filesystem
+        except (ValueError):
+            # If we get a ValueError, load_func didn't understand template
+            # so we just pass it on the the FileSystemLoader
             return self.filesystem_loader.get_source(environment, template)
 
-def custom_template_loader(template_name):
-    # Implement your custom logic to load the template here
-    # This example just raises an exception for demonstration
-    raise LookupError("Template not found with custom logic")
+    def init_db(self, db):
+        self.db = db
+
+def db_template(db, template_name):
+    if template_name.startswith('@'):
+        template = db.session.scalar((select(Page).where(Page.slug == template_name)))
+        if template is None:
+            raise TemplateNotFound(f"Unable to find template '{template_name}'")
+        return template.content, None, None
+    else:
+        raise ValueError(f"Don't know how to handle template named '{template_name}'")
 
 # Create the filesystem loader
 filesystem_loader = FileSystemLoader("templates")
 
 # Combine the loaders
-combined_loader = FallbackLoader(custom_template_loader, filesystem_loader)
-
-# Create the Jinja environment with the combined loader
-env = Environment(loader=combined_loader)
+loader = TalapoinLoader(db_template, filesystem_loader)
