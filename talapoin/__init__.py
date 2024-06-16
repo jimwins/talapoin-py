@@ -147,15 +147,6 @@ def create_app(test_config=None):
         def current_release(**kwargs):
             return ""
 
-        def include(str, **kwargs):
-            return ""
-
-        def template_from_string(str, **kwargs):
-            return ""
-
-        def include_fragment(fragment_name, **kwargs):
-            return ""
-
         def date(str, **kwargs):
             return ""
 
@@ -165,9 +156,6 @@ def create_app(test_config=None):
             'current_url' : current_url,
             'block' : block,
             'current_release' : current_release,
-            'include' : include,
-            'template_from_string' : template_from_string,
-            'includeFragment' : include_fragment,
             'date' : date,
         }
 
